@@ -18,22 +18,19 @@ if ! $(BOOST_ROOT)
 
 project
     : requirements
-        <library>/boost/test//boost_unit_test_framework/<link>static
+        #<library>/boost/test//boost_unit_test_framework/<link>static
         
         # uncomment the line above if you build outside the Boost release
         #<include>$(BOOST_ROOT) 
         # uncomment the line above if you build outside the Boost release
-        #<include>../../..
+        <include>../../..
 #        <toolset>msvc:<asynch-exceptions>on
     ;
 
    test-suite "association"
         :
         [ run basic_usage.cpp ]
+        [ run bimap.cpp ]
         ;
 
-#   test-suite "compile_fail"
-#       :
-#         [ compile-fail xxx.cpp ]
-#         ;
 

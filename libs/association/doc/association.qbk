@@ -1,0 +1,504 @@
+[/
+ / Copyright (c) 2012 Vicente J. Botet Escriba
+ /
+ / Distributed under the Boost Software License, Version 1.0. (See accompanying
+ / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ /]
+
+[article Toward Boost.Association
+    [quickbook 1.5]
+    [version 0.1.0]
+    [authors [Botet Escriba, Vicente J.]]
+    [copyright 2012 Vicente J. Botet Escriba]
+    [id boost.association]
+    [/dirname association]
+    [/purpose Association Framework]
+    [license
+        Distributed under the Boost Software License, Version 1.0.
+        (See accompanying file LICENSE_1_0.txt or copy at
+        [@http://www.boost.org/LICENSE_1_0.txt])
+    ]
+]
+
+[def __Boost_Association__  *Boost.Assocaition*]
+
+[/
+[def __explicit_convert_to [funcref boost::association::explicit_convert_to explicit_convert_to]]
+
+[def __convertible_to [classref boost::association::convertible_to convertible_to]]
+
+[import ../../../boost/association/boost/xx.hpp]
+]
+
+[/
+[section Preface]
+
+[:[".]]
+[:[*['-- ]]]
+
+[endsect]
+/]
+
+[warning Association is not a part of the Boost libraries.]
+
+[/========================]
+[section Overview]
+[/========================]
+
+[/====================================]
+[heading How to Use This Documentation]
+[/====================================]
+
+This documentation makes use of the following naming and formatting conventions.
+
+* Code is in `fixed width font` and is syntax-highlighted.
+* Replaceable text that you will need to supply is in [~italics].
+* If a name refers to a free function, it is specified like this:
+  `free_function()`; that is, it is in code font and its name is followed by `()`   to indicate that it is a free function.
+* If a name refers to a class template, it is specified like this:   `class_template<>`; that is, it is in code font and its name is followed by `<>`   to indicate that it is a class template.
+* If a name refers to a function-like macro, it is specified like this: `MACRO()`;
+  that is, it is uppercase in code font and its name is followed by `()` to   indicate that it is a function-like macro. Object-like macros appear without the   trailing `()`.
+* Names that refer to /concepts/ in the generic programming sense are   specified in CamelCase.
+
+[note In addition, notes such as this one specify non-essential information that provides additional background or rationale.]
+
+Finally, you can mentally add the following to any code fragments in this document:
+
+    // Include all of the core Association files
+    #include <boost/association.hpp>
+
+    using namespace boost::association;
+
+[/==================]
+[section Scope]
+[/==================]
+
+ 
+[endsect]
+
+
+[section Motivation]
+
+The association relationship is an important modeling concept that is found both in entity-relationship modeling and in UML modeling. However, there is no language or library support for implementing an association relationship. Instead, a complex implementation using references or collections of references must be handcrafted and laboriously maintained each time an association relationship is needed. This can be compared to translating while-loops into goto-statements by hand. It is error prone, blurs the intended design, lowers the abstraction level, and complicates maintenance.
+
+We develop an approach to supporting the association relationship through the design of a reusable class library. Boost.Association hides most of the complexity and guarantees that the consistency of the relationship is maintained automatically. 
+
+[heading Primary Objectives]
+
+The design of Boost.Association has been guided by the following main criteria:
+# Domain capture. It should be possible to use association names (e.g., Employment) and role names (e.g., Employer) rather than generic names.# Concise declaration and navigation. There should be as little boilerplate code as possible.# Early warning. Inconsistent declaration and usage is best caught at compile time, secondly at load-time, and thirdly at run-time.# Supporting the design space. The library should enable the library user to make choices of data structure, cardinality, association attributes etc.
+
+The fourth criterion assumes knowledge of the design space. In brief, there are three main axes to be aware of in the design of binary associations:
+* Storage. There are two major ways to store the linkages of an association, as a global data-structure, or distributed in the linked objects.* Declaration. Again, there are two major ways to declare an association. Either as a top-level declaration akin to classes, or as roles in the participating classes.* Manipulation. Again, there are two major ways to manipulate an association. Either, by method calls on a top-level object, or as method calls on participating roles.
+
+[heading Secondary Objectives]
+
+[heading Related Work]
+
+
+[endsect]
+
+
+[/==================]
+[section Description]
+[/==================]
+
+Boost.Assocaition is a bidirectional association library for C++. With Boost.Association you can create associations between two types containers in which both types can be used as key. A bimap<X,Y> can be thought of as a combination of a std::map<X,Y> and a std::map<Y,X>. The learning curve of bimap is almost flat if you know how to use standard containers. A great deal of effort has been put into mapping the naming scheme of the STL in Boost.Bimap. The library is designed to match the common STL containers. 
+
+
+[*Boost.Association] provides:
+
+* general purpose binary fixed-point arithmetic. 
+
+
+[endsect]
+
+
+[endsect]
+
+[/==============================]
+[section:users_guide Users' Guide]
+[/==============================]
+
+[/======================================]
+[section:getting_started Getting Started]
+[/======================================]
+
+[/======================================]
+[section:install Installing Association]
+[/======================================]
+
+[/=================================]
+[heading Getting Boost.Association]
+[/=================================]
+
+You can get the last stable release of Boost.Association by downloading [^association.zip] from the
+
+
+You can also access the latest (unstable?) state from the [@https://svn.boost.org/svn/boost/sandbox/association Boost Sandbox].
+
+[/=================================]
+[heading Building Boost.Association]
+[/=================================]
+
+There is no need to compile [*Boost.Association], since it's a header only library. Just include your Boost header directory in your compiler include path.
+
+[/=========================]
+[heading Requirements]
+[/=========================]
+
+[*Boost.Association] depends on *Boost.Config*, *Boost.MPL*, *Boost.TypeTraits*, *Boost.Assert*, *Boost.Integer*, *Boost.Utility/EnableIf*, .
+
+
+[/========================]
+[heading Exceptions safety]
+[/========================]
+
+All functions in the library are exception-neutral and provide strong guarantee of exception safety as long as the underlying parameters provide it.
+
+[/====================]
+[heading Thread safety]
+[/====================]
+
+All functions in the library are thread-unsafe except when noted explicitly.
+
+[/=======================]
+[heading Tested compilers]
+[/=======================]
+
+[*Boost.Association] is known to work on the following platforms/compilers (lack of some C++/C++0X language support disables some functionality). The needed C++/C++0X language support is:
+
+* SFINAE on expressions
+
+Currently, [*Boost.Association] has been tested on the following compilers/platforms using the trunk (Boost 1.50):
+
+Windows with
+
+* MSVC 10.0
+
+MinGW with
+
+* GCC 4.5.0
+* GCC 4.5.0 -std=c++0x
+* GCC 4.5.2
+* GCC 4.5.2 -std=c++0x
+* GCC 4.6.0
+* GCC 4.6.0 -std=c++0x
+* GCC 4.6.3
+* GCC 4.6.3 -std=c++0x
+* GCC 4.7.0
+* GCC 4.7.0 -std=c++0x
+
+[/
+Cygwin 1.7 with
+
+* GCC 4.3.4
+
+Ubuntu 10.10
+
+* GCC 4.4.5
+* GCC 4.4.5 -std=c++0x
+* GCC 4.5.1
+* GCC 4.5.1 -std=c++0x
+* clang 2.8
+]
+
+MacOs X 10.6.8
+
+* GCC 4.1.2 
+* clang 1.6 
+* clang 2.8
+* clang 2.9
+* clang 2.9 -std=c++0x
+* clang 3.0
+* clang 3.0 -std=c++0x
+* darwin 4.6.2 
+* darwin 4.6.2 -std=c++0x
+* darwin 4.7.0 
+* darwin 4.7.0 -std=c++0x
+
+
+[note Please let us know how this works on other platforms/compilers.]
+
+[note Please send any questions, comments and bug reports to boost <at> lists <dot> boost <dot> org.]
+
+[endsect]
+
+[/=============================]
+[section Hello World! ]
+[/=============================]
+
+
+Here's a very quick illustration of how the class can be used.
+
+ 
+  #include <boost/association.hpp>
+
+  using namesapce boost::association; 
+
+
+[endsect]
+
+[endsect]
+
+
+[/====================================]
+[section One minute tutorial]
+[/====================================]
+
+
+[heading What is an extrinsic biassoc?]
+
+An Extrinsic Biassoc is a data structure that represents bidirectional relations between
+elements of two collections. The container is designed to work as two opposed STL maps. 
+A biassoc between a collection `X` and a collection `Y` can be viewed as a map from `X` to `Y` (this view will be called the ['left map view]) or as a map from `Y` to `X` (known as the ['right map view]). Additionally, the bimap can also be viewed as a set of relations between `X` and `Y` (named the ['collection of relations view]).
+
+The following code creates an empty biassoc container:
+
+    typedef bimap<X,Y> bm_type;
+    bm_type bm;
+
+Given this code, the following is the complete description of the resulting bimap.
+[footnote A type is ['signature-compatible] with other type if it has the same
+signature for functions and metadata. Preconditions, postconditions and the order
+of operations need not be the same.
+]
+
+* `bm.left` is signature-compatible with `std::map<X,Y>`
+* `bm.right` is signature-compatible with `std::map<Y,X>`
+* `bm` is signature-compatible with `std::set< relation<X,Y> >`
+
+
+You can see how a bimap container offers three views over the same collection of bidirectional relations. 
+
+If we have any generic function that work with maps
+
+    template< class MapType >
+    void print_map(const MapType & m)
+    {
+        typedef typename MapType::const_iterator const_iterator;
+        for( const_iterator iter = m.begin(), iend = m.end(); iter != iend; ++iter )
+        {
+            std::cout << iter->first << "-->" << iter->second << std::endl;
+        }
+    }
+
+We can use the ['left map view] and the ['right map view] with it
+
+    bimap< int, std::string > bm;
+    ...
+    print_map( bm.left  );
+    print_map( bm.right );
+
+And the output will be
+
+[pre
+[^1 --> one]
+[^2 --> two]
+...
+[^one --> 1]
+[^two --> 2]
+...
+]
+
+[endsect]
+
+[/====================================]
+[section Tutorial]
+[/====================================]
+
+An association is specified using a name of the association, e.g., Ownership. It associates two participants, e.g., Person and Company. For convenience, we refer to the first participant as Left, and the second as Right. The two participants play roles in the association, e.g., owner and company in the Ownership association.
+
+To illustrate the framework, examples will be drawn from the simple model in Figure [$$], illustrating associations declared between class Person and class Company. The model represents a number of choices primarily intended to illustrate Boost.Association.
+The ownership association specifies that a person can only own one company, that all companies are owned by exactly one person. 
+The managing association specifies that all a subordinate have one boss, who might have several subordinates. 
+The association Consultancy is a specialization of the association Employment. 
+The employment association declares that a person can have at most one employer, while the employer can have multiple employees. 
+The employment association declares a salary as an association field, and consultancy adds an hours field. 
+Linkages of type consultancy will therefore have both a salary and an hours field.
+
+
+[section Declaration of associations]
+
+
+The Employment association from Person to Company is declared as:
+
+  class Employment : public association::base<Employment, Person, multiset_of<Company>, with_info<Contract> > {};
+
+A association::base can be used as a root in an association hierarchy.
+The seemingly redundant fisrt parameter ensures that each association (E.g., Ownership, Employment, and Consultancy) from Person to Company each will get a unique instantiation of association::base. 
+The second and third type parameters indicate the participants in the association. 
+To differentiate the participants, the terminology is that the association Employment is from Person to Company. 
+
+The fourth parameter specifies which class to use for association fields, i.e., to store the salary and hours fields. 
+
+Ideally, such fields should be declared as part of the Employment class. Unfortunately, this brings us in conflict with our implementation strategy where each declared association must have its own instantiation of a generic class (see sections 4.1 and 4.2), and we run into problems with variance of generic parameters. Alas, a separate class is used to store association fields. 
+
+Cardinality is specified using tag types. If no cardinality constraints are defined, the association is assumed one-to-one. As in Boost.Bimap multiset_of signifies the role to be multiple (that is, each Company can be multiple associated to Person). Because no cardinality constraint is specified for Person, the Employment association becomes many-to-one.
+
+Sub-associations are declared using association::derived as the base class. The fourth parameter states the super association.
+  class Consultancy : SubAssociation<Consultancy, multiset_of<Person>, multiset_of<Company>, derived<Employment>, with_info<ConsultancyContract> > {}
+The attribute class ConsultancyContract must be a subclass of the corresponding attribute class in the super association.From a subtype perspective, the cardinality-constraints of a sub-association must be invariant (i.e., neither covariant nor contra variant) because associations can be both inserted into and enumerated. However, our library takes a slightly broader stance.
+The Consultancy association is many-many, as stated by the multiset_of declared constraints. Had the From-constraint in Employment been derived_set_of, uniqueness would have propagated down into sub-associations. set_of specifies that “A person has only one employer, but nothing is known about cardinalities of sub-associations”. It is explicit ignorance. It is possible to extend the uniqueness to sub-associations as well (specifying derived_set_of). In the example model, Consultancy is a sub-association of Employment, but it is decided that while a person can only be employed at one company, it is possible to do consultancy for several companies.Most associations do not carry attributes. However, Employment and Consultancy do, and the last type parameter tells which class to use for storing attributes of the employment. In C++ it is possible to declare two template classes with the same name if they differ in the number of the generic arguments. Hence, it is possible to provide a declaration syntax in which the attribute class seems optional.
+
+[endsect]
+
+[section Behavior of associations]
+
+The basic operations on associations are to add, lookup, and remove. When an association is declared, a singleton object representing the list of linkages is inherited from the instantiated super class. This singleton (named assoc) is used to access the behavior of the association. The following code does add, lookup, and remove using the associations declared above. Assume John and Jane are declared as Person, and Dell and HP are declared as Company:
+  Employment::add(John,Dell);     // John is employed at Dell
+  Consultancy::add(Jane,Dell); 	// Jane consults for Dell
+  Employment::find<right>(Dell);        // returns a lazy collection of Person including John and Jane.
+  Consultancy::find<right>(Dell);       // returns a lazy collection of Person including only Jane.  Consultancy::add(John,HP);      // John consults for HP
+  Employment::find<left>(John);         // returns a lazy collection of Company including Dell and HP  Consultancy::remove(Jane,Dell); // Jane no longer consults for Dell
+
+  Employment::assoc().insert(Employment::value_type( John,Dell));     // John is employed at Dell
+  Consultancy::assoc().insert(Employment::value_type( Jane,Dell)); 	// Jane consults for Dell
+  Employment::right().find(Dell);        // returns a lazy collection of Person including John and Jane.
+  Consultancy::right().find(Dell);       // returns a lazy collection of Person including only Jane.  Consultancy::assoc().insert(Employment::value_type(John,HP));      // John consults for Dell
+  Employment::left().find(John);         // returns a lazy collection of Company including Dell and HP  Consultancy::assoc().erase(Employment::value_type(Jane,Dell)); // Jane no longer consults for Dell
+
+It has not been possible to find a way to (conveniently) introduce role names into the association declaration. 
+Hence querying is done using generic names like GetFromSet rather than Employees, and GetToSet rather than Employers. 
+However, some headway can be made in C++ using pointers to members. We will briefly take that up in the conclusion.
+
+The find methods returns a Range. As you know, Boost.Range is the foundation of query facilities. Thus, one can write queries such as:
+
+  from p in Employment.Assoc.GetFromSet(Dell) where Managing.Assoc.GetFromSet( p ).Count() > 10 select p.Name
+
+  auto names = Employment::assoc().by<employer>().find(Dell) 
+      | map_value 
+      | filtered(range::size(Managing::assoc().by<boss>().find( _ )) > 10) 
+      | project<name>
+
+This query selects the names of all employees (including consultants) of Dell that hava more than 10 subordinates.
+
+The action Consultancy::assoc().remove(Jane, Dell) removes the Consultancy association from Jane to Dell. 
+Two removal methods are provided. Remove removes the linkage from an association (and thereby also in all super associations), 
+and RemoveSub removes the linkage in the association and in all sub-associations.
+
+Consider the following statement:
+
+  Employment::replace(John, HP); // sets John�s employer to be HP, removes prior employment
+
+The semantics of the replace operation is significant. 
+It ensures cardinality consistency by first removing the association from John to Dell, and 
+then inserting the association from John to HP. 
+As Employment is a many-to_one association, the choice is to ensure consistency, or to throw an exception if John is 
+currently employed. Integrating the test, removal and addition into a single operation, giving fewer internal method calls, 
+fewer state tests, and less dereferencing. 
+However, testing and explicit removal is supported by Noiai.
+
+Associations can be equipped with attributes. Assume Employment is declared with a Contract class with a Salary field, 
+and Consultancy uses a subclass ConsultancyContract with a LastDay field. add returns an Employment::iterator 
+which defined a get<contract> function returning a reference to a Constract.
+
+  Employment::add(John,Dell)->get<contract>().Salary = finaloffer;
+
+To retrieve the attributes for a given employment, we need to get an iterator to the assocaition:
+
+  Employment::get(John,Dell)->get<contract>().Salary += 300;
+
+The indexer returns an Range<Contract> (as there might be several linkages between the two). Notice that indexing (Jane, Dell) in Employment will return an enumerable of Contracts, of which some might be ConsultancyContracts, while indexing in Consultancy will return an enumerable of ConsultancyContracts.
+
+[endsect]
+[endsect]
+
+[/====================================]
+[section Examples]
+[/====================================]
+
+[section:alfa  Employment]
+
+[endsect]
+[endsect]
+
+
+[/====================================]
+[section:ext_references External Resources]
+[/====================================]
+[variablelist
+[
+    [[@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3352.html [*N3352 - C++ Binary Fixed-Point Arithmetic]]]
+    [Lawrence Crowl]
+]
+
+]
+
+[endsect]
+
+[endsect]
+[section Reference]
+
+
+[xinclude core.xml]
+
+[endsect]
+
+
+[/=================]
+[section Appendices]
+[/=================]
+
+[/====================================]
+[section:history Appendix: History]
+[/====================================]
+[section [*Version 0.1.0, June 30, 2012] ]
+
+['Announcement of Association]
+
+[*Features:]
+
+* one-to-one role associations.
+* tagged types.
+
+[endsect]
+[endsect]
+
+
+[/====================================]
+[section:rationale Appendix: Design Rationale]
+[/====================================]
+
+[heading Why ?]
+
+
+[endsect]
+
+[section:implementation Appendix: Implementation Notes]
+
+[heading Why?]
+
+
+[endsect]
+[/====================================]
+[section:acknowledgements Appendix: Acknowledgements]
+[/====================================]
+
+Thanks to 
+
+
+[endsect]
+
+[/=====================================]
+[section:todo  Appendix : Future plans]
+[/=====================================]
+
+[heading Tasks to do before review]
+
+* Add info associations.
+* Add one-to-many and many-to-many associations.
+* Add extrinsic associations based on the design of Boost.Bimap.
+* Write the doc.
+
+[heading Tasks to do if the library is accepted]
+
+* Add complete tests.
+
+[heading For later releases]
+
+* See how to integrate with Boost.Role.
+
+[endsect]
+[endsect]
+
