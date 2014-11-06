@@ -108,7 +108,7 @@ Boost.Assocaition is a bidirectional association library for C++. With Boost.Ass
 
 [*Boost.Association] provides:
 
-* general purpose binary fixed-point arithmetic. 
+* . 
 
 
 [endsect]
@@ -379,7 +379,7 @@ and RemoveSub removes the linkage in the association and in all sub-associations
 
 Consider the following statement:
 
-  Employment::replace(John, HP); // sets John’s employer to be HP, removes prior employment
+  Employment::replace(John, HP); // sets John's employer to be HP, removes prior employment
 
 The semantics of the replace operation is significant. 
 It ensures cardinality consistency by first removing the association from John to Dell, and 
@@ -419,8 +419,8 @@ The indexer returns an Range<Contract> (as there might be several linkages betwe
 [/====================================]
 [variablelist
 [
-    [[@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3352.html [*N3352 - C++ Binary Fixed-Point Arithmetic]]]
-    [Lawrence Crowl]
+    [.]
+    [.]
 ]
 
 ]

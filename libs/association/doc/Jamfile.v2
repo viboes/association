@@ -1,4 +1,4 @@
-#  Boost.FixedPoint library documentation Jamfile  ---------------------------------
+#  Boost.Association library documentation Jamfile  ---------------------------------
 #
 #  Copyright Vicente J. Botet Escriba 2012. Use, modification and
 #  distribution is subject to the Boost Software License, Version
@@ -18,7 +18,7 @@ import modules ;
 
 if --enable-index in  [ modules.peek : ARGV ]
 {
-   ECHO "Building the FixedPoint docs with automatic index generation enabled." ;
+   ECHO "Building the Association docs with automatic index generation enabled." ;
    using auto-index ;
    project : requirements
          # <auto-index>on turns on index (or off).
@@ -35,7 +35,7 @@ if --enable-index in  [ modules.peek : ARGV ]
         # PDF native index support is probably better for PDFs as then you actually get page numbers.
 
         <auto-index-script>index.idx # Specifies the name of the script to load. 
-        # <auto-index-prefix>../../../ # Path to /fixed_point so index.idx !scan-path can use boost/ and libs/doc.
+        # <auto-index-prefix>../../../ # Path to /association so index.idx !scan-path can use boost/ and libs/doc.
         <auto-index-prefix>../../.. 
         
         <quickbook-define>enable_index
@@ -43,14 +43,14 @@ if --enable-index in  [ modules.peek : ARGV ]
         # <auto-index-verbose>on
 
 	#doxygen common parameters
-        <doxygen:param>"PREDEFINED=\"BOOST_FIXED_POINT_DOXYGEN_INVOKED=1\" \\
+        <doxygen:param>"PREDEFINED=\"BOOST_ASSOCIATION_DOXYGEN_INVOKED=1\" \\
                                    \"BOOST_STATIC_CONSTEXPR=constexpr\" \\
                                    \"BOOST_DEDUCED_TYPENAME=typename\" \\
                                    \"BOOST_EXPLICIT=explicit\" \\
                                    \"BOOST_PREVENT_MACRO_SUBSTITUTION=\" \\
                                    \"BOOST_STATIC_CONSTANT(x,y)=static x const y\" \\
                                    \"BOOST_STATIC_ASSERT(cnd)=\" \\
-                                   \"BOOST_FIXED_POINT_REQUIRES(CND) \" \\
+                                   \"BOOST_ASSOCIATION_REQUIRES(CND) \" \\
                                    \"BOOST_CONSTEXPR=constexpr\""
 
 
@@ -105,21 +105,21 @@ if --enable-index in  [ modules.peek : ARGV ]
 }
 else
 {
-   ECHO "Building the FixedPoint docs with automatic index generation disabled. To get an auto-index, try building with --enable-index." ;
+   ECHO "Building the Association docs with automatic index generation disabled. To get an auto-index, try building with --enable-index." ;
 
    project : requirements
 	#doxygen common parameters
-        <doxygen:param>"PREDEFINED=\"BOOST_FIXED_POINT_DOXYGEN_INVOKED=1\" \\
+        <doxygen:param>"PREDEFINED=\"BOOST_ASSOCIATION_DOXYGEN_INVOKED=1\" \\
                                    \"BOOST_STATIC_CONSTEXPR=constexpr\" \\
                                    \"BOOST_DEDUCED_TYPENAME=typename\" \\
                                    \"BOOST_EXPLICIT=explicit\" \\
                                    \"BOOST_PREVENT_MACRO_SUBSTITUTION=\" \\
                                    \"BOOST_STATIC_CONSTANT(x,y)=static x const y\" \\
                                    \"BOOST_STATIC_ASSERT(cnd)=\" \\
-                                   \"BOOST_FIXED_POINT_REQUIRES(CND) \" \\
+                                   \"BOOST_ASSOCIATION_REQUIRES(CND) \" \\
                                   \"BOOST_CONSTEXPR=constexpr\""
 
-#                                   \"BOOST_FIXED_POINT_REQUIRES(CND) , typename enable_if_c< CND >::type\" \\
+#                                   \"BOOST_ASSOCIATION_REQUIRES(CND) , typename enable_if_c< CND >::type\" \\
 
         <doxygen:param>ALIASES=" Effects=\"<p><b>Effects:</b>\" \\ 
                                  Example=\"<p><b>Example:</b>\" \\ 
@@ -175,17 +175,17 @@ using quickbook ;
 
 doxygen core
    :
-      [ glob ../../../boost/fixed_point/number.hpp ]
+      [ glob ../../../boost/association/* ]
    :
         <xsl:param>"boost.doxygen.reftitle=Core"
    ;
 
 
-xml fixed_point : fixed_point.qbk ;
+xml association : association.qbk ;
 
 boostbook standalone
    :
-      fixed_point
+      association
    :
         # HTML options first:
         # Use graphics not text for navigation:
@@ -227,7 +227,7 @@ boostbook standalone
         # better use SVG's instead:
         <format>pdf:<xsl:param>admon.graphics.extension=".svg"
         <format>pdf:<xsl:param>admon.graphics.path=$(boost-images)/
-        <format>pdf:<xsl:param>boost.url.prefix=http://www.boost.org/doc/libs/release/libs/fixed_point_ext/doc/html
+        <format>pdf:<xsl:param>boost.url.prefix=http://www.boost.org/doc/libs/release/libs/association/doc/html
 
 
         <dependency>core
@@ -239,7 +239,7 @@ install css-install : $(boost-root)/doc/src/boostbook.css : <location>html ;
 install png-install : [ glob $(boost-root)/doc/src/images/*.png ] : <location>html/images ;
 install svg-install : [ glob $(boost-root)/doc/src/images/*.svg ] : <location>html/images ;
 
-install pdf-install : standalone : <install-type>PDF <location>. <name>fixed_point.pdf ;
+install pdf-install : standalone : <install-type>PDF <location>. <name>association.pdf ;
 
-install fixed_point-png-install : [ glob images/*.png ] : <location>html/images ;
-install fixed_point-svg-install : [ glob images/*.svg ] : <location>html/images ;
+install association-png-install : [ glob images/*.png ] : <location>html/images ;
+install association-svg-install : [ glob images/*.svg ] : <location>html/images ;
