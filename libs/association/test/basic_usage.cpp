@@ -73,6 +73,21 @@ BOOST_ASSOCIATION_DCL(Friends, m_boyfriend, m_girlfriend);
 
 int main()
 {
+  {
+    CBoy Henry;
+    {
+      CGirl Sally;
+
+      Friends::connect(Henry,Sally);
+    }
+    if (Friends::get<girl>(Henry)) {
+      std::cout << "boy: she left." << '\n';
+      return 1;
+    }
+
+
+  }
+  {
     CBoy Henry;
     CGirl Sally;
 
@@ -83,8 +98,8 @@ int main()
     Friends::disconnect<girl>(Sally);
     Friends::connect(Henry,Sally);
     Henry.GiveGirlfriendFlowers();
-    //~ Sally.SlapBoyfriend();
-    Friends::get<girl>(Henry)->SlapBoyfriend();
-
-    return 0;
+    Sally.SlapBoyfriend();
+    //Friends::get<girl>(Henry)->SlapBoyfriend();
+  }
+  return 0;
 }
