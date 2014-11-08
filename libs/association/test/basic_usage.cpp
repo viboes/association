@@ -36,7 +36,17 @@ public:
         m_girlfriend.disconnect();
     }
     Friends::end_point<girl>::type m_girlfriend;
+
+    void swap(CBoy& other)
+    {
+      m_girlfriend.swap(other.m_girlfriend);
+    }
 };
+
+void swap(CBoy& x, CBoy& y)
+{
+  x.swap(y);
+}
 
 class CGirl {
 public:
@@ -75,6 +85,13 @@ int main()
 {
   {
     CBoy Henry;
+
+    CBoy Vincent;
+    //Vincent = Henry; // compile fail as not copyable
+    Vincent = std::move(Henry);
+  }
+  {
+    CBoy Henry;
     {
       CGirl Sally;
 
@@ -84,9 +101,30 @@ int main()
       std::cout << "boy: she left." << '\n';
       return 1;
     }
-
-
   }
+
+  {
+    CBoy Henry;
+    CGirl Sally;
+    Friends::connect(Henry,Sally);
+    CBoy Vincent;
+    Vincent = std::move(Henry); // Henry lost its girl friend
+
+    if (Friends::get<girl>(Henry)) {
+      std::cout << "boy: she left." << '\n';
+      return 1;
+    }
+  }
+
+  {
+    CBoy Henry;
+    CGirl Sally;
+    Friends::connect(Henry,Sally);
+    CBoy Henry2;
+    CGirl Sally2;
+    swap(Henry,Henry2); // Henry and Henry2 exchanges their girl-friends
+  }
+
   {
     CBoy Henry;
     CGirl Sally;

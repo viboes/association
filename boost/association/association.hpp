@@ -104,6 +104,10 @@ namespace boost
       //typedef element_type value_type;
       typedef element_type * pointer;
 
+      end_ptr() = delete;
+      end_ptr(end_ptr const&) = delete;
+      end_ptr(end_ptr &&) = delete;
+
       /**
        * @Effects Constructs a end_ptr object that is not associated, value-initializing the stored pointer.
        * Postconditions: get() == nullptr.
@@ -169,11 +173,13 @@ namespace boost
         reset(ptr);
         return *this;
       }
-      end_ptr& operator=(end_ptr& rhs)
+
+      end_ptr& operator=(end_ptr&& rhs)
       {
         if (this != &rhs)
         {
           reset(rhs.element_ptr_);
+          rhs.element_ptr_ = 0;
         }
         return *this;
       }
@@ -185,6 +191,7 @@ namespace boost
         element_ptr_ = 0;
         get_field<tagged<end_ptr<T, Entity> , entity_tag> , element_type>::apply(*tmp).disconnect_one();
       }
+
       /**
        * Effects: assigns p to the stored pointer, and then if the old value of the stored pointer, old_p,
        * was not equal to nullptr, calls get_deleter()(old_p).
@@ -198,17 +205,17 @@ namespace boost
         element_ptr_ = ptr;
         get_field<tagged<end_ptr<T, Entity> , entity_tag> , element_type>::apply(*ptr).connect_one(
             get_entity());
-            //&get_embeding<entity_type, entity_tag, end_ptr<Entity, T> >::apply(*this));
       }
+
       void swap(end_ptr& other)
       {
-        T* entity_u = element_ptr_;
-        T* element_u = other.element_ptr_;
-
+        element_type* element_u = other.element_ptr_;
+        other.reset(element_ptr_);
         reset(element_u);
-        other.reset(entity_u);
       }
+
       void connect(element_type* ptr) { reset(ptr); }
+
       void disconnect() { reset(); }
 
       friend class end_ptr<T, Entity> ;
@@ -231,6 +238,12 @@ namespace boost
         element_ptr_ = 0;
       }
     };
+
+    template <typename E, typename T>
+    void swap(end_ptr<E,T>& x, end_ptr<E,T>& y)
+    {
+      x.swap(y);
+    }
 
     template <typename T, typename U>
     class intrinsic
