@@ -84,13 +84,18 @@ BOOST_ASSOCIATION_DCL(Friends, m_boyfriend, m_girlfriend);
 int main()
 {
   {
+    std::cout << __LINE__ << '\n';
     CBoy Henry;
 
     CBoy Vincent;
     //Vincent = Henry; // compile fail as not copyable
     Vincent = std::move(Henry);
+    if (Friends::get<girl>(Henry)) {
+      return 1;
+    }
   }
   {
+    std::cout << __LINE__ << '\n';
     CBoy Henry;
     {
       CGirl Sally;
@@ -98,12 +103,14 @@ int main()
       Friends::connect(Henry,Sally);
     }
     if (Friends::get<girl>(Henry)) {
-      std::cout << "boy: she left." << '\n';
       return 1;
+    } else {
+      std::cout << "boy: she left." << '\n';
     }
   }
 
   {
+    std::cout << __LINE__ << '\n';
     CBoy Henry;
     CGirl Sally;
     Friends::connect(Henry,Sally);
@@ -111,21 +118,28 @@ int main()
     Vincent = std::move(Henry); // Henry lost its girl friend
 
     if (Friends::get<girl>(Henry)) {
-      std::cout << "boy: she left." << '\n';
       return 1;
+    } else {
+      std::cout << "boy: she left." << '\n';
     }
   }
 
   {
+    std::cout << __LINE__ << '\n';
     CBoy Henry;
     CGirl Sally;
     Friends::connect(Henry,Sally);
     CBoy Henry2;
     CGirl Sally2;
+    Friends::connect(Henry2,Sally2);
     swap(Henry,Henry2); // Henry and Henry2 exchanges their girl-friends
+    if (! Friends::get<girl>(Henry)) {
+      return 1;
+    }
   }
 
   {
+    std::cout << __LINE__ << '\n';
     CBoy Henry;
     CGirl Sally;
 
@@ -138,6 +152,11 @@ int main()
     Henry.GiveGirlfriendFlowers();
     Sally.SlapBoyfriend();
     //Friends::get<girl>(Henry)->SlapBoyfriend();
+    if (Friends::get<boy>(Sally)) {
+      return 1;
+    } else {
+      std::cout << "girl: she left." << '\n';
+    }
   }
-  return 0;
+  return 2;
 }
